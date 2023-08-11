@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-//content type
+// content type
 type contentHandler interface {
 	String(*WorkBook) []string
 	FirstCol() uint16
@@ -169,7 +169,11 @@ func (c *NumberCol) String(wb *WorkBook) []string {
 	if fNo := wb.Xfs[c.Index].formatNo(); fNo != 0 {
 		//t := timeFromExcelTime(c.Float, wb.dateMode == 1)
 		//return []string{yymmdd.Format(t, wb.Formats[fNo].str)}
-		return []string{wb.Formats[fNo].str}
+		if i, ok := wb.Formats[fNo]; ok {
+			return []string{i.str}
+		} else {
+			return []string{}
+		}
 	}
 	return []string{strconv.FormatFloat(c.Float, 'f', -1, 64)}
 }
