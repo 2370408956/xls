@@ -7,8 +7,6 @@ import (
 	"strings"
 
 	"time"
-
-	yymmdd "github.com/extrame/goyymmdd"
 )
 
 //content type
@@ -71,8 +69,8 @@ func (xf *XfRk) String(wb *WorkBook) string {
 					if !isFloat {
 						f = float64(i)
 					}
-					t := timeFromExcelTime(f, wb.dateMode == 1)
-					return yymmdd.Format(t, formatter.str)
+					_ = timeFromExcelTime(f, wb.dateMode == 1)
+					return formatter.str
 				}
 			}
 			// see http://www.openoffice.org/sc/excelfileformat.pdf Page #174
@@ -169,8 +167,9 @@ type NumberCol struct {
 
 func (c *NumberCol) String(wb *WorkBook) []string {
 	if fNo := wb.Xfs[c.Index].formatNo(); fNo != 0 {
-		t := timeFromExcelTime(c.Float, wb.dateMode == 1)
-		return []string{yymmdd.Format(t, wb.Formats[fNo].str)}
+		//t := timeFromExcelTime(c.Float, wb.dateMode == 1)
+		//return []string{yymmdd.Format(t, wb.Formats[fNo].str)}
+		return []string{wb.Formats[fNo].str}
 	}
 	return []string{strconv.FormatFloat(c.Float, 'f', -1, 64)}
 }
